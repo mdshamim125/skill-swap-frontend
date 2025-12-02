@@ -13,7 +13,7 @@ const DashboardSidebar = async () => {
 
   return (
     <DashboardSidebarContent
-      userInfo={userInfo}
+      userInfo={userInfo ?? { role: "user" }}   // ⬅️ prevent undefined
       navItems={navItems}
       dashboardHome={dashboardHome}
     />

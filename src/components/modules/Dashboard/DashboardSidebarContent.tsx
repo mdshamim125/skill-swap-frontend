@@ -22,6 +22,9 @@ const DashboardSidebarContent = ({
   dashboardHome,
 }: DashboardSidebarContentProps) => {
   const pathname = usePathname();
+
+  // const role = userInfo?.role?.toLowerCase() ?? "user"; // FIX
+
   return (
     <div className="hidden md:flex h-full w-64 flex-col border-r bg-card">
       {/* Logo/Brand */}

@@ -1,35 +1,42 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use server"
+"use server";
 
+import { serverFetch } from "@/lib/server-fetch";
 import { UserInfo } from "@/types/user.interface";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { getCookie } from "./tokenHandlers";
 
 export const getUserInfo = async (): Promise<UserInfo | null> => {
+  try {
+    const response = await serverFetch.get("/auth/me");
 
-    try {
-        const accessToken = await getCookie("accessToken");
+    const result = await response.json();
 
-        if (!accessToken) {
-            return null;
-        }
+    if (!result.success) return null;
 
-        const verifiedToken = jwt.verify(accessToken, process.env.JWT_SECRET as string) as JwtPayload;
+    const data = result.data;
 
-        if (!verifiedToken) {
-            return null;
-        }
+    return {
+      name:
+        data.admin?.name ||
+        data.mentor?.name ||
+        data.user?.name ||
+        data.name ||
+        "Unknown User",
 
-        const userInfo: UserInfo = {
-            name: verifiedToken.name || "Unknown User",
-            email: verifiedToken.email,
-            role: verifiedToken.role,
-        };
+      email:
+        data.admin?.email ||
+        data.mentor?.email ||
+        data.user?.email ||
+        data.email ||
+        "",
 
-        return userInfo;
-    } catch (error: any) {
-        console.log(error);
-        return null;
-    }
-
-}
+      role:
+        data.admin?.role ||
+        data.mentor?.role ||
+        data.user?.role ||
+        data.role ||
+        "USER",
+    };
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

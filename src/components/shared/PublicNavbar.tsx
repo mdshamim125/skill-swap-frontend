@@ -1,26 +1,24 @@
-import { getCookie } from "@/services/auth/tokenHandlers";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
-import LogoutButton from "./LogoutButton";
+import { ModeToggle } from "./ModeToggler";
+import UserMenu from "./user-menu";
 
 const PublicNavbar = async () => {
   const navItems = [
-    { href: "#", label: "Consultation" },
-    { href: "#", label: "Health Plans" },
-    { href: "#", label: "Medicine" },
-    { href: "#", label: "Diagnostics" },
-    { href: "#", label: "NGOs" },
+    { href: "/", label: "Home" },
+    { href: "/mentors", label: "Mentors" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
+    { href: "/blog", label: "Blog" },
   ];
-
-  const accessToken = await getCookie("accessToken");
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur  dark:bg-background/95">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="text-xl font-bold text-primary">PH Doc</span>
+          <span className="text-xl font-bold text-primary">Skill Swap</span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
@@ -35,14 +33,10 @@ const PublicNavbar = async () => {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center space-x-2">
-          {accessToken ? (
-            <LogoutButton />
-          ) : (
-            <Link href="/login">
-              <Button>Login</Button>
-            </Link>
-          )}
+        {/* Right side */}
+        <div className="flex items-center gap-2">
+          <ModeToggle />
+          <UserMenu />
         </div>
 
         {/* Mobile Menu */}
