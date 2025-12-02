@@ -1,62 +1,37 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { FormInput } from "./form-input";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-const LoginSchema = z.object({
-  email: z.string().email("Enter a valid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
-
-type LoginFields = z.infer<typeof LoginSchema>;
+import { FormInput } from "./form-input"; // same component you used
+import { useActionState } from "react";
+import { loginAction } from "@/services/auth/loginAction";
+import { toast } from "sonner";
 
 export default function LoginForm() {
-  const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState("");
 
-  const form = useForm<LoginFields>({
-    resolver: zodResolver(LoginSchema),
-  });
+  // Using action-based login (as you already built)
+  const [state, formAction, isPending] = useActionState(loginAction, null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = form;
+  // Show server error from the action state
+  if (state && !state.success && state.message !== serverError) {
+    setServerError(state.message || "Login failed");
+  }
 
-  const onSubmit = async (data: LoginFields) => {
-    setLoading(true);
-    setServerError("");
+  useEffect(() => {
+    if (!state) return;
 
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok || !result.success) {
-        setServerError(result.message || "Login failed");
-        return;
-      }
-
-      // Redirect after login
-      window.location.href = "/dashboard";
-    } catch (error: any) {
-      console.error(error);
-      setServerError("Something went wrong");
-    } finally {
-      setLoading(false);
+    if (!state.success) {
+      toast.error(state.message || "Login failed");
     }
-  };
+
+    if (state.success) {
+      toast.success("Login successful!");
+      setTimeout(() => {}, 400);
+    }
+  }, [state]);
 
   return (
     <div
@@ -68,34 +43,31 @@ export default function LoginForm() {
         Welcome Back 👋
       </h2>
 
-      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="space-y-4" action={formAction}>
         <FormInput
           label="Email"
           type="email"
           placeholder="example@mail.com"
-          error={errors.email?.message}
-          {...register("email")}
+          name="email"
         />
 
         <FormInput
           label="Password"
           type="password"
           placeholder="••••••••"
-          error={errors.password?.message}
-          {...register("password")}
+          name="password"
         />
 
         {serverError && <p className="text-sm text-red-500">{serverError}</p>}
 
-        <Button className="w-full" type="submit" disabled={loading}>
-          {loading ? "Signing in..." : "Login"}
+        <Button className="w-full h-11" type="submit" disabled={isPending}>
+          {isPending ? "Logging in..." : "Login"}
         </Button>
       </form>
 
-      {/* Already Registered + Forgot Password */}
       <div className="mt-6 text-center text-sm text-muted-foreground">
         <p>
-          Don’t have an account?{" "}
+          New here?{" "}
           <Link
             href="/register"
             className="font-medium text-primary underline-offset-4 hover:underline"

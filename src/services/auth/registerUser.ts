@@ -6,82 +6,58 @@ import { zodValidator } from "@/lib/zodValidator";
 import { registerUserValidationZodSchema } from "@/zod/auth.validation";
 import { loginUser } from "./loginUser";
 
-export const registerUser = async (
-  _currentState: any,
-  formData: FormData
-): Promise<any> => {
+export const registerUser = async (_state: any, formData: FormData) => {
   try {
+    // Normalize and extract values from FormData
     const payload = {
-      email: formData.get("email"),
-      name: formData.get("name"),
-      password: formData.get("password"),
-      confirmPassword: formData.get("confirmPassword"),
+      email: formData.get("email") ?? "",
+      name: formData.get("name") ?? "",
+      password: formData.get("password") ?? "",
+      confirmPassword: formData.get("confirmPassword") ?? "",
 
-      // Optional fields
-      avatar: formData.get("avatar") || undefined,
+      // Avatar should be stored separately later (upload endpoint)
+      avatar: null,
+
       isVerified: false,
       isPremium: false,
-      premiumExpires: undefined,
 
-      // Profile fields
       profile: {
-        bio: formData.get("bio") || undefined,
-        country: formData.get("country") || undefined,
-        city: formData.get("city") || undefined,
-        expertise: formData.get("expertise") || undefined,
-        phone: formData.get("phone") || undefined,
+        bio: formData.get("bio") || null,
+        country: formData.get("country") || null,
+        city: formData.get("city") || null,
+        expertise: formData.get("expertise") || null,
+        phone: formData.get("phone") || null,
       },
     };
 
-    // Validate with Zod
+    // Validate payload
     const validation = zodValidator(payload, registerUserValidationZodSchema);
-    if (validation.success === false) {
-      return validation; // return validation error
-    }
+    if (!validation.success) return validation;
 
-    const validatedData: any = validation.data;
+    const validatedData = validation.data;
 
-    // Backend expects JSON in "data"
-    const formattedRegisterData = {
-      password: validatedData.password,
-
-      email: validatedData.email,
-      name: validatedData.name,
-      avatar: validatedData.avatar,
-
-      isVerified: validatedData.isVerified,
-      isPremium: validatedData.isPremium,
-      premiumExpires: validatedData.premiumExpires,
-
-      profile: validatedData.profile,
-    };
-
-    const newFormData = new FormData();
-    newFormData.append("data", JSON.stringify(formattedRegisterData));
-
-    // Handle avatar file upload (optional)
-    const avatarFile = formData.get("file");
-    if (avatarFile instanceof Blob) {
-      newFormData.append("file", avatarFile);
-    }
-
-    // API CALL — your backend route:
-    const res = await serverFetch.post("/user/register", {
-      body: newFormData,
+    // Call backend
+    const response = await serverFetch.post("/user/create", {
+      body: JSON.stringify(validatedData),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
-    const result = await res.json();
+    const result = await response.json();
+    console.log("REGISTER RESPONSE:", result);
 
-    // Auto login after successful registration
+    // Auto login on success
     if (result.success) {
-      await loginUser(_currentState, formData);
+      await loginUser(_state, formData);
     }
 
     return result;
   } catch (error: any) {
-    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
-      throw error;
-    }
+    // Allow Next.js redirect exceptions
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) throw error;
+
+    console.error("REGISTER ERROR:", error);
 
     return {
       success: false,
