@@ -1,6 +1,6 @@
 import React from "react";
 
-const PatientDashboardLayout = ({
+const UserDashboardLayout = ({
   children,
 }: {
   children: React.ReactNode;
@@ -8,4 +8,4 @@ const PatientDashboardLayout = ({
   return <div>{children}</div>;
 };
 
-export default PatientDashboardLayout;
+export default UserDashboardLayout;

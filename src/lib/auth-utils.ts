@@ -1,93 +1,105 @@
 export type UserRole = "ADMIN" | "MENTOR" | "USER";
 
-// exact : ["/my-profile", "settings"]
-//   patterns: [/^\/dashboard/, /^\/user/], // Routes starting with /dashboard/* /user/*
 export type RouteConfig = {
   exact: string[];
   patterns: RegExp[];
 };
 
+/* ---------------------------------------------
+   PUBLIC ROUTES (no authentication required)
+---------------------------------------------- */
 export const authRoutes = ["/login", "/register"];
 
+/* ---------------------------------------------
+   COMMON PROTECTED ROUTES (all logged users)
+---------------------------------------------- */
 export const commonProtectedRoutes: RouteConfig = {
-  exact: ["/my-profile"],
-  patterns: [], // [/password/change-password, /password/reset-password => /password/*]
+  exact: ["/my-profile", "/settings"],
+  patterns: [],
 };
 
-export const mentorProtectedRoutes: RouteConfig = {
-  patterns: [/^\/mentor/],
-  exact: [], //
-};
+/* ---------------------------------------------
+   ROLE-BASED PROTECTED ROUTES
+---------------------------------------------- */
 
+// ADMIN
 export const adminProtectedRoutes: RouteConfig = {
-  patterns: [/^\/admin/], // Routes starting with /admin/*
-  exact: [], // "/admins"
+  exact: [],
+  patterns: [/^\/dashboard\/admin/], // Matches adminNavItems
 };
 
+// MENTOR
+export const mentorProtectedRoutes: RouteConfig = {
+  exact: [],
+  patterns: [/^\/dashboard\/mentor/], // Corrected to match mentor routes
+};
+
+// USER
 export const userProtectedRoutes: RouteConfig = {
-  patterns: [/^\/dashboard/], // Routes starting with /dashboard/*
-  exact: [], // "/dashboard"
+  exact: [],
+  patterns: [
+    /^\/dashboard(?!\/admin|\/mentor)/,
+    // Matches /dashboard, /dashboard/xxx
+    // But NOT /dashboard/admin or /dashboard/mentor
+  ],
 };
 
-export const isAuthRoute = (pathname: string) => {
-  return authRoutes.some((route: string) => route === pathname);
+/* ---------------------------------------------
+   HELPERS
+---------------------------------------------- */
+export const isAuthRoute = (pathname: string): boolean => {
+  return authRoutes.includes(pathname);
 };
 
 export const isRouteMatches = (
   pathname: string,
   routes: RouteConfig
 ): boolean => {
-  if (routes.exact.includes(pathname)) {
-    return true;
-  }
-  return routes.patterns.some((pattern: RegExp) => pattern.test(pathname));
-  // if pathname === /dashboard/my-appointments => matches /^\/dashboard/ => true
+  if (routes.exact.includes(pathname)) return true;
+  return routes.patterns.some((pattern) => pattern.test(pathname));
 };
 
+/* ---------------------------------------------
+   DETERMINE WHICH ROLE OWNS A PATH
+---------------------------------------------- */
 export const getRouteOwner = (
   pathname: string
 ): "ADMIN" | "MENTOR" | "USER" | "COMMON" | null => {
-  if (isRouteMatches(pathname, adminProtectedRoutes)) {
-    return "ADMIN";
-  }
-  if (isRouteMatches(pathname, mentorProtectedRoutes)) {
-    return "MENTOR";
-  }
-  if (isRouteMatches(pathname, userProtectedRoutes)) {
-    return "USER";
-  }
-  if (isRouteMatches(pathname, commonProtectedRoutes)) {
-    return "COMMON";
-  }
+  if (isRouteMatches(pathname, adminProtectedRoutes)) return "ADMIN";
+  if (isRouteMatches(pathname, mentorProtectedRoutes)) return "MENTOR";
+  if (isRouteMatches(pathname, userProtectedRoutes)) return "USER";
+  if (isRouteMatches(pathname, commonProtectedRoutes)) return "COMMON";
   return null;
 };
 
+/* ---------------------------------------------
+   DEFAULT DASHBOARD ROUTE (AFTER LOGIN)
+---------------------------------------------- */
 export const getDefaultDashboardRoute = (role: UserRole): string => {
-  if (role === "ADMIN") {
-    return "/admin/dashboard";
+  switch (role) {
+    case "ADMIN":
+      return "/dashboard/admin";
+    case "MENTOR":
+      return "/dashboard/mentor";
+    case "USER":
+      return "/dashboard";
+    default:
+      return "/";
   }
-  if (role === "MENTOR") {
-    return "/mentor/dashboard";
-  }
-  if (role === "USER") {
-    return "/dashboard";
-  }
-  return "/";
 };
 
+/* ---------------------------------------------
+   VALIDATE REDIRECT BASED ON ROLE
+---------------------------------------------- */
 export const isValidRedirectForRole = (
   redirectPath: string,
   role: UserRole
 ): boolean => {
   const routeOwner = getRouteOwner(redirectPath);
 
-  if (routeOwner === null || routeOwner === "COMMON") {
-    return true;
-  }
+  // Public or common routes allowed
+  if (!routeOwner || routeOwner === "COMMON") return true;
 
-  if (routeOwner === role) {
-    return true;
-  }
-
-  return false;
+  // Only allow if the route belongs to the logged-in role
+  return routeOwner === role;
 };

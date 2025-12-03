@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getUserInfo } from "@/services/auth/getUserInfo";
 import { UserInfo } from "@/types/user.interface";
+import { getDefaultDashboardRoute } from "@/lib/auth-utils";
 
 export default function UserMenu() {
   const router = useRouter();
@@ -47,25 +48,16 @@ export default function UserMenu() {
 
   const handleDashboardRedirect = () => {
     if (!user) return;
-
-    switch (user.role) {
-      case "ADMIN":
-        router.push("/admin");
-        break;
-      case "MENTOR":
-        router.push("/mentor");
-        break;
-      default:
-        router.push("/dashboard");
-    }
+    router.push(getDefaultDashboardRoute(user.role));
   };
 
   // Avatar initials
-  const initials = user?.name
-    ?.split(" ")
-    .map((w) => w[0])
-    .join("")
-    .toUpperCase() || "U";
+  const initials =
+    user?.name
+      ?.split(" ")
+      .map((w) => w[0])
+      .join("")
+      .toUpperCase() || "U";
 
   return (
     <DropdownMenu>
