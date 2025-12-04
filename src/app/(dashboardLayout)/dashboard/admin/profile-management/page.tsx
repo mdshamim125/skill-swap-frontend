@@ -51,7 +51,7 @@ const ProfileSchema = z.object({
   interests: z.array(z.string()).optional(),
   languages: z.array(z.string()).optional(),
 
-  skills: z.array(z.string()).min(1, "Select at least one skill"),
+  skills: z.array(z.string()).optional(),
 
   expertise: z.enum(
     ["BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT"] as const,
@@ -382,6 +382,7 @@ export default function ProfileManagementPage() {
 
           {/* Skills multiselect */}
           <FormField
+          
             control={form.control}
             name="skills"
             render={({ field }) => (
