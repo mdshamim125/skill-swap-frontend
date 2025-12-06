@@ -15,7 +15,7 @@ export const getCommonNavItems = (role: UserRole): NavSection[] => {
         },
         {
           title: "My Profile",
-          href: `/my-profile`,
+          href: `/dashboard/my-profile`,
           icon: "User",
           roles: ["USER", "MENTOR", "ADMIN"],
         },
@@ -26,7 +26,7 @@ export const getCommonNavItems = (role: UserRole): NavSection[] => {
 
 export const mentorNavItems: NavSection[] = [
   {
-    title: "Patient Management",
+    title: "User Management",
     items: [
       {
         title: "Appointments",
@@ -56,8 +56,8 @@ export const userNavItems: NavSection[] = [
     title: "Appointments",
     items: [
       {
-        title: "My Appointments",
-        href: "/dashboard/my-appointments",
+        title: "My Bookings",
+        href: "/dashboard/my-bookings",
         icon: "Calendar", // ✅ String
         roles: ["USER"],
       },
