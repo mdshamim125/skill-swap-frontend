@@ -13,12 +13,10 @@ export async function getMyProfile() {
       credentials: "include",
     });
 
-
     const res = await response.json();
     console.log(res);
 
     return res;
-
   } catch (error: any) {
     console.error("getMyProfile error:", error);
 
@@ -59,5 +57,21 @@ export async function updateMyProfile(payload: any) {
           ? error?.message
           : "Failed to update profile",
     };
+  }
+}
+
+export async function checkAuth() {
+  try {
+    const res = await fetch(`${process.env.BASE_API_URL}/user/my-profile`, {
+      credentials: "include",
+      cache: "no-store",
+    });
+
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    return data?.data || null;
+  } catch {
+    return null;
   }
 }

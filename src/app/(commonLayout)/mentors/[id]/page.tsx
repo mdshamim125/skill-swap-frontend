@@ -2,6 +2,7 @@
 import { getMentorById } from "@/services/mentor/mentor";
 import Image from "next/image";
 import { MapPin, Phone, BadgeCheck, Briefcase, Mail } from "lucide-react";
+import BookingClientWrapper from "@/components/modules/booking/BookingClientWrapper";
 
 export default async function MentorDetails({
   params,
@@ -142,13 +143,10 @@ export default async function MentorDetails({
       <div className="mt-12 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-xl p-8 shadow-lg">
         <h2 className="text-3xl font-bold mb-4">Ready to Book a Session?</h2>
         <p className="text-lg opacity-90 mb-6">
-          Connect with {mentor.name} and accelerate your growth with expert
-          guidance.
+          Connect with {mentor.name} and accelerate your growth.
         </p>
 
-        <button className="px-6 py-3 bg-white text-blue-700 rounded-lg font-semibold hover:bg-gray-100 transition">
-          Book a Session
-        </button>
+        <BookingClientWrapper mentor={mentor} />
       </div>
     </div>
   );
