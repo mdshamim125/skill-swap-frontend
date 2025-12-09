@@ -8,6 +8,8 @@ import { Button } from "../ui/button";
 interface TablePaginationProps {
   currentPage: number;
   totalPages: number;
+    onPageChange?: (page: number) => void;
+
 }
 
 const TablePagination = ({ currentPage, totalPages }: TablePaginationProps) => {
@@ -37,7 +39,7 @@ const TablePagination = ({ currentPage, totalPages }: TablePaginationProps) => {
         disabled={currentPage <= 1 || isPending}
       >
         <ChevronLeft className="h-4 w-4 mr-1" />
-        Previous
+        Prev
       </Button>
 
       <div className="flex items-center gap-1">
@@ -77,11 +79,6 @@ const TablePagination = ({ currentPage, totalPages }: TablePaginationProps) => {
         Next
         <ChevronRight className="h-4 w-4 ml-1" />
       </Button>
-
-      <span className="text-sm text-muted-foreground ml-2">
-        {/* Page 9 of 20 */}
-        Page {currentPage} of {totalPages}
-      </span>
     </div>
   );
 };

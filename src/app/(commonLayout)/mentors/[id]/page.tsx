@@ -29,7 +29,10 @@ export default async function MentorDetails({
       <div className="flex flex-col md:flex-row gap-8 items-start md:items-center bg-white p-6 rounded-xl shadow-sm border">
         {/* Avatar */}
         <Image
-          src={mentor.profile?.avatarUrl || "/placeholder-avatar.png"}
+          src={
+            mentor?.avatar ||
+            "https://scontent.fdac31-1.fna.fbcdn.net/v/t39.30808-6/480289536_1394443704855366_8149698206212697807_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=86c6b0&_nc_ohc=qGBu1L4WH44Q7kNvwHPYdLK&_nc_oc=Adm_t78VWRncVfXaBjTyjLRoNu-2VRvzO3nKKf31ybgB7_GLsXhnpI5pIdnzca-CZ7g&_nc_zt=23&_nc_ht=scontent.fdac31-1.fna&_nc_gid=Xpq5zQCatw-tCTGjl9uhVA&oh=00_Afm-GkYBPtK1UnR4W8Rx5rm1kYTq1awThlsJEbeMuf4pLw&oe=693C5712"
+          }
           alt="Avatar"
           width={200}
           height={200}

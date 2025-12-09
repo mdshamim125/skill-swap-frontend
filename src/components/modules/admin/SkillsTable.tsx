@@ -9,11 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import EditSkillModal from "./EditSkillModal";
 import { getSkills, deleteSkill } from "@/services/admin/skillsManagement";
+import TablePagination from "@/components/shared/TablePagination";
 
 import {
   AlertDialog,
@@ -26,6 +26,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+
+import { useSearchParams } from "next/navigation";
 
 interface Skill {
   id: string;
@@ -41,9 +43,14 @@ interface SkillsResponse {
 }
 
 export default function SkillsTable() {
+  const searchParams = useSearchParams();
+
+  // get page from URL, fallback = 1
+  const pageFromUrl = Number(searchParams.get("page")) || 1;
+
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(pageFromUrl);
   const [total, setTotal] = useState(0);
   const limit = 10;
 
@@ -52,6 +59,11 @@ export default function SkillsTable() {
 
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+  // Sync URL page → state when user navigates back/forward
+  useEffect(() => {
+    setPage(pageFromUrl);
+  }, [pageFromUrl]);
 
   // Fetch skills
   const fetchSkills = useCallback(async () => {
@@ -142,28 +154,26 @@ export default function SkillsTable() {
                     <TableCell className="font-medium">{skill.title}</TableCell>
                     <TableCell>{skill.category}</TableCell>
                     <TableCell className="flex gap-2 justify-center">
-                      <Button
-                        size="sm"
-                        variant="outline"
+                      <button
+                        className="px-3 py-1 border rounded"
                         onClick={() => handleEdit(skill)}
                       >
                         Edit
-                      </Button>
+                      </button>
 
-                      {/* AlertDialog for Delete */}
                       <AlertDialog
                         open={isDeleteOpen && deleteId === skill.id}
                         onOpenChange={setIsDeleteOpen}
                       >
                         <AlertDialogTrigger asChild>
-                          <Button
-                            size="sm"
-                            variant="destructive"
+                          <button
+                            className="px-3 py-1 bg-red-600 text-white rounded"
                             onClick={() => setDeleteId(skill.id)}
                           >
                             Delete
-                          </Button>
+                          </button>
                         </AlertDialogTrigger>
+
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
@@ -172,6 +182,7 @@ export default function SkillsTable() {
                               permanently delete the skill.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
+
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction onClick={handleDelete}>
@@ -187,25 +198,9 @@ export default function SkillsTable() {
             </TableBody>
           </Table>
 
-          {/* Pagination */}
-          <div className="flex justify-between mt-4">
-            <Button
-              variant="outline"
-              disabled={page === 1}
-              onClick={() => setPage((p) => p - 1)}
-            >
-              Previous
-            </Button>
-            <span className="flex items-center">
-              Page {page} of {totalPages || 1}
-            </span>
-            <Button
-              variant="outline"
-              disabled={page === totalPages || totalPages === 0}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Next
-            </Button>
+          {/* Pagination Component */}
+          <div className="mt-6">
+            <TablePagination currentPage={page} totalPages={totalPages} />
           </div>
         </>
       )}
@@ -215,7 +210,7 @@ export default function SkillsTable() {
         <EditSkillModal
           skill={editingSkill}
           onClose={handleCloseModal}
-          onUpdated={fetchSkills} // refresh table after edit
+          onUpdated={fetchSkills}
         />
       )}
     </div>

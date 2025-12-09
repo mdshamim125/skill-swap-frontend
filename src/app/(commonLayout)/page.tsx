@@ -1,8 +1,7 @@
-import { Hero } from "@/components/modules/Home/Hero";
-import Specialities from "@/components/modules/Home/Specialties";
+import Hero from "@/components/modules/Home/Hero";
 import Steps from "@/components/modules/Home/Steps";
 import Testimonials from "@/components/modules/Home/Testimonials";
-import TopRatedDoctors from "@/components/modules/Home/TopRatedDoctors";
+import TopRatedMentors from "@/components/modules/Home/TopRatedMentors";
 import Head from "next/head";
 
 export default function Home() {
@@ -19,8 +18,8 @@ export default function Home() {
       </Head>
       <main>
         <Hero />
-        <Specialities />
-        <TopRatedDoctors />
+        {/* <Specialities /> */}
+        <TopRatedMentors />
         <Steps />
         <Testimonials />
       </main>

@@ -14,8 +14,8 @@ export const authRoutes = ["/login", "/register"];
    COMMON PROTECTED ROUTES (all logged users)
 ---------------------------------------------- */
 export const commonProtectedRoutes: RouteConfig = {
-  exact: ["/my-profile", "/settings"],
-  patterns: [],
+  exact: ["/dashboard/my-profile", "/dashboard/chat"],
+  patterns: [/^\/dashboard\/chat/],
 };
 
 /* ---------------------------------------------
@@ -38,11 +38,10 @@ export const mentorProtectedRoutes: RouteConfig = {
 export const userProtectedRoutes: RouteConfig = {
   exact: [],
   patterns: [
-    /^\/dashboard(?!\/admin|\/mentor)/,
-    // Matches /dashboard, /dashboard/xxx
-    // But NOT /dashboard/admin or /dashboard/mentor
+    /^\/dashboard(?!\/admin|\/mentor|\/chat|\/my-profile)/,
   ],
 };
+
 
 /* ---------------------------------------------
    HELPERS

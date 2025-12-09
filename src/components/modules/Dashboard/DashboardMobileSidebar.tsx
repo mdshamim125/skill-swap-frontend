@@ -26,7 +26,7 @@ const DashboardMobileSidebar = ({
   return (
     <div className=" flex h-full flex-col">
       {/* Logo */}
-      <div className="flex h-16 items-center border-b px-6">
+      <div className="flex h-16 items-center border-b px-6 py-6">
         <Link href={dashboardHome}>
           <span className="text-xl font-bold text-primary">PH Healthcare</span>
         </Link>

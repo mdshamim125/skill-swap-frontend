@@ -19,6 +19,12 @@ export const getCommonNavItems = (role: UserRole): NavSection[] => {
           icon: "User",
           roles: ["USER", "MENTOR", "ADMIN"],
         },
+        {
+          title: "Chat",
+          href: `/dashboard/chat`,
+          icon: "MessageCircle",
+          roles: ["USER", "MENTOR", "ADMIN"],
+        },
       ],
     },
   ];
@@ -53,35 +59,12 @@ export const mentorNavItems: NavSection[] = [
 
 export const userNavItems: NavSection[] = [
   {
-    title: "Appointments",
+    title: "",
     items: [
       {
         title: "My Bookings",
         href: "/dashboard/my-bookings",
         icon: "Calendar", // ✅ String
-        roles: ["USER"],
-      },
-      {
-        title: "Book Appointment",
-        href: "/consultation",
-        icon: "ClipboardList", // ✅ String
-        roles: ["USER"],
-      },
-    ],
-  },
-  {
-    title: "Medical Records",
-    items: [
-      {
-        title: "My Prescriptions",
-        href: "/dashboard/my-prescriptions",
-        icon: "FileText", // ✅ String
-        roles: ["USER"],
-      },
-      {
-        title: "Health Records",
-        href: "/dashboard/health-records",
-        icon: "Activity", // ✅ String
         roles: ["USER"],
       },
     ],
@@ -93,44 +76,20 @@ export const adminNavItems: NavSection[] = [
     title: "User Management",
     items: [
       {
-        title: "Admins",
-        href: "/dashboard/admin/admins-management",
-        icon: "Shield", // ✅ String
-        roles: ["ADMIN"],
-      },
-      {
-        title: "Mentors",
-        href: "/dashboard/admin/mentors-management",
-        icon: "Stethoscope", // ✅ String
-        roles: ["ADMIN"],
-      },
-      {
-        title: "Patients",
-        href: "/dashboard/admin/patients-management",
+        title: "User Management",
+        href: "/dashboard/admin/user-management",
         icon: "Users", // ✅ String
         roles: ["ADMIN"],
       },
     ],
   },
   {
-    title: "Hospital Management",
+    title: "Skill Management",
     items: [
       {
-        title: "Appointments",
-        href: "/dashboard/admin/appointments-management",
-        icon: "Calendar", // ✅ String
-        roles: ["ADMIN"],
-      },
-      {
-        title: "Schedules",
-        href: "/dashboard/admin/schedules-management",
-        icon: "Clock", // ✅ String
-        roles: ["ADMIN"],
-      },
-      {
-        title: "Specialities",
-        href: "/dashboard/admin/specialities-management",
-        icon: "Hospital", // ✅ String
+        title: "Skill Management",
+        href: "/dashboard/admin/skill-management",
+        icon: "Tools", // ✅ String
         roles: ["ADMIN"],
       },
     ],
