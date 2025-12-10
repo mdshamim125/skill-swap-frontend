@@ -17,6 +17,8 @@ export async function createBookingAPI(payload: {
     });
 
     const data = await res.json();
+    console.log(data);
+
     return data;
   } catch (err: any) {
     console.error("createBookingAPI error:", err);

@@ -9,6 +9,7 @@ import { UserInfo } from "@/types/user.interface";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import UserDropdown from "./UserDropdown";
 
 interface DashboardSidebarContentProps {
   userInfo: UserInfo;
@@ -30,7 +31,7 @@ const DashboardSidebarContent = ({
       {/* Logo/Brand */}
       <div className="flex h-16 items-center border-b py-6 px-6">
         <Link href={dashboardHome} className="flex items-center space-x-2">
-          <span className="text-xl font-bold text-primary">PH Healthcare</span>
+          <span className="text-xl font-bold text-primary">MentorHub</span>
         </Link>
       </div>
 
@@ -96,6 +97,8 @@ const DashboardSidebarContent = ({
               {userInfo.role.toLowerCase()}
             </p>
           </div>
+          {/* User Dropdown */}
+          <UserDropdown userInfo={userInfo} />
         </div>
       </div>
     </div>

@@ -35,22 +35,16 @@ export const mentorNavItems: NavSection[] = [
     title: "User Management",
     items: [
       {
-        title: "Appointments",
-        href: "/dashboard/mentor/appointments",
-        icon: "Calendar", // ✅ String
+        title: "My Schedules",
+        href: "/dashboard/mentor/my-class-schedules",
+        icon: "Clock", // ✅ String
         badge: "3",
         roles: ["MENTOR"],
       },
       {
-        title: "My Schedules",
-        href: "/dashboard/mentor/my-schedules",
-        icon: "Clock", // ✅ String
-        roles: ["MENTOR"],
-      },
-      {
-        title: "Prescriptions",
-        href: "/dashboard/mentor/prescriptions",
-        icon: "FileText",
+        title: "Users Reviews",
+        href: "/dashboard/mentor/users-reviews",
+        icon: "Star", // ✅ String
         roles: ["MENTOR"],
       },
     ],

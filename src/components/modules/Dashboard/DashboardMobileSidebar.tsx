@@ -28,7 +28,7 @@ const DashboardMobileSidebar = ({
       {/* Logo */}
       <div className="flex h-16 items-center border-b px-6 py-6">
         <Link href={dashboardHome}>
-          <span className="text-xl font-bold text-primary">PH Healthcare</span>
+          <span className="text-xl font-bold text-primary">MentorHub</span>
         </Link>
       </div>
       <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
