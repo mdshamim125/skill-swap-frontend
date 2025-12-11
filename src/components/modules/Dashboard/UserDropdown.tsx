@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { logoutUser } from "@/services/auth/logoutUser";
 import { UserInfo } from "@/types/user.interface";
-import { User } from "lucide-react";
+import { Home } from "lucide-react";
 import Link from "next/link";
 
 interface UserDropdownProps {
@@ -51,11 +51,11 @@ const UserDropdown = ({ userInfo }: UserDropdownProps) => {
         {/* --- Profile --- */}
         <DropdownMenuItem asChild>
           <Link
-            href={`/dashboard/my-profile`}
+            href={`/`}
             className="cursor-pointer flex items-center gap-2"
           >
-            <User className="h-4 w-4" />
-            Profile
+            <Home className="h-4 w-4" />
+            Back Home
           </Link>
         </DropdownMenuItem>
 

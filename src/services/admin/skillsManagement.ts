@@ -67,7 +67,7 @@ export async function createSkill(_prevState: any, formData: FormData) {
 }
 
 // --------------------------------------------------
-// GET ALL
+// GET Skills
 // --------------------------------------------------
 export async function getSkills(page: number = 1, limit: number = 10) {
   try {
@@ -93,6 +93,28 @@ export async function getSkills(page: number = 1, limit: number = 10) {
     };
   }
 }
+
+export async function getAllSkills() {
+  try {
+    const response = await serverFetch.get(`/skills/all`, {
+      cache: "no-cache",
+      next: { tags: ["skills-list"] },
+    });
+
+    return await response.json();
+  } catch (error: any) {
+    console.error("Failed to fetch skills:", error);
+    return {
+      success: false,
+      data: [],
+      message:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Something went wrong",
+    };
+  }
+}
+
 
 // --------------------------------------------------
 // GET SINGLE

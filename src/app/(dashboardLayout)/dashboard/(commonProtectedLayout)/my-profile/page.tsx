@@ -34,7 +34,7 @@ import {
   getMyProfile,
   updateMyProfile,
 } from "@/services/profile/profileManagement";
-import { getSkills } from "@/services/admin/skillsManagement";
+import { getAllSkills } from "@/services/admin/skillsManagement";
 
 /* -------------------------
    Zod schema
@@ -112,7 +112,7 @@ export default function ProfileManagementPage() {
       try {
         const [profileRes, skillsRes] = await Promise.all([
           getMyProfile(),
-          getSkills(),
+          getAllSkills(),
         ]);
 
         /* --- Profile --- */
@@ -160,6 +160,7 @@ export default function ProfileManagementPage() {
     load();
   }, [form]);
 
+  console.log(skillsOptions);
   /* -------------------------
      Submit Handler
      ------------------------- */

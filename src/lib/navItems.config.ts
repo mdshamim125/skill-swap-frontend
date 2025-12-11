@@ -38,7 +38,7 @@ export const mentorNavItems: NavSection[] = [
         title: "My Schedules",
         href: "/dashboard/mentor/my-class-schedules",
         icon: "Clock", // ✅ String
-        badge: "3",
+        // badge: "3",
         roles: ["MENTOR"],
       },
       {
