@@ -6,6 +6,8 @@ import { getUserInfo } from "@/services/auth/getUserInfo";
 import { getNavItemsByRole } from "@/lib/navItems.config";
 import { getDefaultDashboardRoute } from "@/lib/auth-utils";
 
+export const dynamic = "force-dynamic";
+
 const CommonDashboardLayout = async ({
   children,
 }: {

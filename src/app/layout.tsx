@@ -7,6 +7,7 @@ import LogoutSuccessToast from "@/components/shared/LogoutSuccessToast";
 import { ThemeProvider } from "@/components/providers/theme.provider";
 
 import "./globals.css";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +21,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "SkillSwap — Peer Skill Exchange",
-  description: "SkillSwap is a mentorship and skill exchange platform built with Next.js.",
+  description:
+    "SkillSwap is a mentorship and skill exchange platform built with Next.js.",
 };
 
 export default function RootLayout({
@@ -30,18 +32,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         {/* Theme & Global Providers */}
         <ThemeProvider defaultTheme="system" storageKey="skillswap-theme">
           {/* All pages + components */}
           {children}
 
-          {/* Global Toast System */}
-          <Toaster position="top-right" richColors />
+          <Suspense fallback={null}>
+            {/* Global Toast System */}
+            <Toaster position="top-right" richColors />
 
-          {/* Auto-trigger login/logout feedback */}
-          <LoginSuccessToast />
-          <LogoutSuccessToast />
+            {/* Auto-trigger login/logout feedback */}
+            <LoginSuccessToast />
+            <LogoutSuccessToast />
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>
