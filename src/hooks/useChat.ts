@@ -1,65 +1,65 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// src/hooks/useChat.ts
-// import { useEffect, useRef, useState } from "react";
-// import { io, Socket } from "socket.io-client";
 
-// export function useChat() {
-//   const socketRef = useRef<Socket | null>(null);
-//   const [connected, setConnected] = useState(false);
-//   const [messages, setMessages] = useState<any[]>([]);
+import { useEffect, useRef, useState } from "react";
+import { io, Socket } from "socket.io-client";
 
-//   useEffect(() => {
-//     // Create socket connection (cookies will be sent automatically)
-//     const socket = io(
-//       process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:5000",
-//       {
-//         withCredentials: true, // IMPORTANT: allows HttpOnly cookies to be sent
-//       }
-//     );
+export function useChat() {
+  const socketRef = useRef<Socket | null>(null);
+  const [connected, setConnected] = useState(false);
+  const [messages, setMessages] = useState<any[]>([]);
 
-//     socketRef.current = socket;
+  useEffect(() => {
+    // Create socket connection (cookies will be sent automatically)
+    const socket = io(
+      process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:5000",
+      {
+        withCredentials: true, // IMPORTANT: allows HttpOnly cookies to be sent
+      }
+    );
 
-//     socket.on("connect", () => {
-//       console.log("Socket connected");
-//       setConnected(true);
-//     });
+    socketRef.current = socket;
 
-//     socket.on("disconnect", () => {
-//       setConnected(false);
-//     });
+    socket.on("connect", () => {
+      console.log("Socket connected");
+      setConnected(true);
+    });
 
-//     socket.on("new_message", (message: any) => {
-//       setMessages((prev) => [...prev, message]);
-//     });
+    socket.on("disconnect", () => {
+      setConnected(false);
+    });
 
-//     socket.on("error_message", (err: any) => {
-//       console.error("socket error:", err);
-//     });
+    socket.on("new_message", (message: any) => {
+      setMessages((prev) => [...prev, message]);
+    });
 
-//     return () => {
-//       socket.disconnect();
-//       socketRef.current = null;
-//     };
-//   }, []);
+    socket.on("error_message", (err: any) => {
+      console.error("socket error:", err);
+    });
 
-//   const joinConversation = (conversationId: string) => {
-//     socketRef.current?.emit("join_conversation", conversationId);
-//   };
+    return () => {
+      socket.disconnect();
+      socketRef.current = null;
+    };
+  }, []);
 
-//   const leaveConversation = (conversationId: string) => {
-//     socketRef.current?.emit("leave_conversation", conversationId);
-//   };
+  const joinConversation = (conversationId: string) => {
+    socketRef.current?.emit("join_conversation", conversationId);
+  };
 
-//   const sendMessage = (conversationId: string, text: string) => {
-//     socketRef.current?.emit("send_message", { conversationId, text });
-//   };
+  const leaveConversation = (conversationId: string) => {
+    socketRef.current?.emit("leave_conversation", conversationId);
+  };
 
-//   return {
-//     connected,
-//     messages,
-//     joinConversation,
-//     leaveConversation,
-//     sendMessage,
-//     socketRef,
-//   };
-// }
+  const sendMessage = (conversationId: string, text: string) => {
+    socketRef.current?.emit("send_message", { conversationId, text });
+  };
+
+  return {
+    connected,
+    messages,
+    joinConversation,
+    leaveConversation,
+    sendMessage,
+    socketRef,
+  };
+}
