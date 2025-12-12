@@ -49,6 +49,8 @@ export default async function MentorListPage({
     new Set(skillList.map((s: any) => s.category))
   );
 
+  console.log(mentors[1].id)
+
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="text-3xl font-semibold text-center mb-6">Find a Mentor</h1>

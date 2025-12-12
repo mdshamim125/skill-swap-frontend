@@ -3,7 +3,7 @@ import MentorCard from "@/components/ui/MentorCard";
 
 export default async function TopRatedMentors() {
   const res = await fetch(
-    "http://localhost:5000/api/v1/user/top-rated-mentors",
+    "https://skill-swap-backend-9gdh.onrender.com/api/v1/user/top-rated-mentors",
     {
       cache: "no-store",
       headers: {

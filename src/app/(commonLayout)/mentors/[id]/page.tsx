@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { getMentorById } from "@/services/mentor/mentor";
 import Image from "next/image";
 import { MapPin, Phone, BadgeCheck, Briefcase, Mail, Star } from "lucide-react";
@@ -6,13 +7,16 @@ import BookingClientWrapper from "@/components/modules/booking/BookingClientWrap
 import ReviewForm from "@/components/modules/reviews/ReviewForm";
 import ReviewList from "@/components/modules/reviews/ReviewList";
 
-export default async function MentorDetails({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { id } = params;
+export default async function MentorDetails({ params }: any) {
+  const resolved = await params;
+  const id = resolved?.value?.id;
+
+  console.log("FINAL ID:", id);
+
+  console.log("params:", params, "id:", id);
+
   const mentorData = await getMentorById(id);
+  console.log(id, mentorData);
 
   if (!mentorData?.success) {
     return (
