@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getNewAccessToken } from "@/services/auth/auth.service";
 import { getCookie } from "@/services/auth/tokenHandlers";
 
