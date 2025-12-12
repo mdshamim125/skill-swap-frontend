@@ -3,6 +3,8 @@ import SubscriptionClient from "../../../components/modules/booking/Subscription
 import { subscriptionPlans } from "@/lib/plan";
 import { getMyProfile } from "@/services/profile/profileManagement";
 
+export const dynamic = "force-dynamic";
+
 export default async function SubscriptionPage() {
   const user = await getMyProfile();
 

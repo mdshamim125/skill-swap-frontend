@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+export const dynamic = "force-dynamic";
+
 import { serverFetch } from "@/lib/server-fetch";
 
 /**
  * Fetch logged-in user's profile
  */
+
 export async function getMyProfile() {
   try {
     const response = await serverFetch.get(`/user/my-profile`, {
