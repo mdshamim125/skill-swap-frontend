@@ -35,17 +35,17 @@ export default function Hero() {
             transition={{ delay: 0.5, duration: 0.7 }}
           >
             <div className="mt-10 flex flex-wrap gap-5">
-              <Link href="/find-mentor">
+              <Link href="/mentors">
                 <button className="px-8 py-4 bg-indigo-600 text-white rounded-xl text-lg font-medium shadow-lg hover:bg-indigo-700 hover:shadow-xl transition">
                   Find a Mentor
                 </button>
               </Link>
 
-              <Link href="/become-mentor">
+              {/* <Link href="/become-mentor">
                 <button className="px-8 py-4 bg-white text-gray-800 rounded-xl text-lg font-medium shadow-md hover:bg-gray-100 transition">
                   Become a Mentor
                 </button>
-              </Link>
+              </Link> */}
             </div>
           </Animate>
         </div>
