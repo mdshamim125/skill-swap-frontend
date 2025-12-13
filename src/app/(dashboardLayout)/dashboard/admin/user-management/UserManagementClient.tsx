@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { getAllUsers } from "@/services/user/user.actions";
 import UserManagementTable from "@/components/modules/admin/UserManagementTable";
 import TablePagination from "@/components/shared/TablePagination";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -85,7 +84,7 @@ export default function UserManagementClient({
     <div className="space-y-6">
       {/* Filters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <div className="flex flex-col space-y-1">
+        {/* <div className="flex flex-col space-y-1">
           <label className="text-sm font-medium">Search</label>
           <Input
             placeholder="Name or email..."
@@ -93,7 +92,7 @@ export default function UserManagementClient({
             onChange={(e) => updateUrl({ search: e.target.value })}
             disabled={isPending}
           />
-        </div>
+        </div> */}
 
         <div className="flex flex-col space-y-1">
           <label className="text-sm font-medium">Role</label>

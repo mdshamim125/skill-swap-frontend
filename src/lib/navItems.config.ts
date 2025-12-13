@@ -20,7 +20,7 @@ export const getCommonNavItems = (role: UserRole): NavSection[] => {
           roles: ["USER", "MENTOR", "ADMIN"],
         },
         {
-          title: "Chat",
+          title: "Chat (Future Work InshaAllah)",
           href: `/dashboard/chat`,
           icon: "MessageCircle",
           roles: ["USER", "MENTOR", "ADMIN"],
@@ -67,23 +67,23 @@ export const userNavItems: NavSection[] = [
 
 export const adminNavItems: NavSection[] = [
   {
-    title: "User Management",
-    items: [
-      {
-        title: "User Management",
-        href: "/dashboard/admin/user-management",
-        icon: "Users", // ✅ String
-        roles: ["ADMIN"],
-      },
-    ],
-  },
-  {
     title: "Skill Management",
     items: [
       {
         title: "Skill Management",
         href: "/dashboard/admin/skill-management",
         icon: "Tools", // ✅ String
+        roles: ["ADMIN"],
+      },
+    ],
+  },
+  {
+    title: "User Management",
+    items: [
+      {
+        title: "User Management",
+        href: "/dashboard/admin/user-management",
+        icon: "Users", // ✅ String
         roles: ["ADMIN"],
       },
     ],
