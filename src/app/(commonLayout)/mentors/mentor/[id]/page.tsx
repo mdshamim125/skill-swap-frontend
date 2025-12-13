@@ -7,27 +7,25 @@ import BookingClientWrapper from "@/components/modules/booking/BookingClientWrap
 import ReviewForm from "@/components/modules/reviews/ReviewForm";
 import ReviewList from "@/components/modules/reviews/ReviewList";
 
-export default async function MentorDetails({ params }: any) {
-  const resolved = await params;
-  const id = resolved?.value?.id;
+const MentorDetailPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { id } = await params;
 
-  console.log("FINAL ID:", id);
-
-  console.log("params:", params, "id:", id);
 
   const mentorData = await getMentorById(id);
-  console.log(id, mentorData);
+  const mentor = mentorData.data;
 
-  if (!mentorData?.success) {
+    console.log(id, mentorData);
+
+
+  if (!mentor) {
     return (
-      <div className="p-10 text-center text-red-600">
-        Failed to load mentor information.
-      </div>
+      <div className="p-10 text-center text-red-600">Mentor not found</div>
     );
   }
-
-  const mentor = mentorData.data;
-  console.log(mentor);
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-12">
@@ -184,7 +182,9 @@ export default async function MentorDetails({ params }: any) {
       </section>
     </div>
   );
-}
+};
+
+export default MentorDetailPage;
 
 // /* eslint-disable @typescript-eslint/no-explicit-any */
 // import { getMentorById } from "@/services/mentor/mentor";

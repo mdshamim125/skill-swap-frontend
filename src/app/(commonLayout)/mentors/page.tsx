@@ -49,7 +49,7 @@ export default async function MentorListPage({
     new Set(skillList.map((s: any) => s.category))
   );
 
-  console.log(mentors[1].id)
+  console.log(mentors[1].id);
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -121,7 +121,9 @@ export default async function MentorListPage({
                     className="w-full mt-3 h-8 bg-blue-600 text-white text-sm"
                     asChild
                   >
-                    <Link href={`/mentors/${mentor.id}`}>View Details</Link>
+                    <Link href={`/mentors/mentor/${mentor.id}`}>
+                      View Details
+                    </Link>
                   </Button>
                 </div>
               </div>

@@ -29,9 +29,10 @@ export default function ReviewForm({ mentorId }: { mentorId: string }) {
 
       if (result?.success && Array.isArray(result?.data?.data)) {
         setBookings(result?.data?.data);
-      } else {
-        toast.error("Failed to load bookings");
       }
+      // else {
+      //   toast.error("You haven't booking this yet!");
+      // }
 
       setLoading(false);
     };
@@ -40,7 +41,7 @@ export default function ReviewForm({ mentorId }: { mentorId: string }) {
   }, [mentorId]);
 
   const handleSubmit = async () => {
-    if (!bookingId) return toast.error("Please select a booking.");
+    if (!bookingId) return toast.error("Please select a booking or booking first.");
     if (!rating) return toast.error("Rating is required.");
     if (!comment.trim()) return toast.error("Comment cannot be empty.");
 
@@ -87,7 +88,7 @@ export default function ReviewForm({ mentorId }: { mentorId: string }) {
         <SelectContent>
           {bookings.length === 0 && (
             <SelectItem value="none" disabled>
-              No completed bookings
+              You haven&apos;t booking this yet!
             </SelectItem>
           )}
 

@@ -53,7 +53,7 @@ export default function MentorCard({ mentor, index }: MentorCardProps) {
           ))}
         </div>
 
-        <Link href={`/mentors/${mentor.id}`}>
+        <Link href={`/mentors/mentor/${mentor.id}`}>
           <button className="mt-3 px-4 py-1 bg-indigo-600 text-white text-xs rounded-md hover:bg-indigo-700 transition">
             View Profile
           </button>
