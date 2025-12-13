@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { getNewAccessToken } from "@/services/auth/auth.service";
-import { getCookie } from "@/services/auth/tokenHandlers";
+import { cookies } from "next/headers";
 
 const BACKEND_API_URL =
   process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5000/api/v1";
@@ -18,7 +18,10 @@ const serverFetchHelper = async (
   }
 
   // get latest token AFTER refresh
-  const accessToken = await getCookie("accessToken");
+  // const accessToken = await getCookie("accessToken");
+
+  const cookiesStore = await cookies();
+  const accessToken = cookiesStore.get("accessToken")?.value;
 
   const response = await fetch(`${BACKEND_API_URL}${endpoint}`, {
     headers: {
