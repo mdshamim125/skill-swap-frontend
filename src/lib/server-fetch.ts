@@ -1,120 +1,66 @@
 export const dynamic = "force-dynamic";
 
+import { getNewAccessToken } from "@/services/auth/auth.service";
+import { getCookie } from "@/services/auth/tokenHandlers";
+
 const BACKEND_API_URL =
   process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5000/api/v1";
 
+// /auth/login
 const serverFetchHelper = async (
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit
 ): Promise<Response> => {
-  const response = await fetch(`${BACKEND_API_URL}${endpoint}`, {
-    ...options,
-    credentials: "include", // ✅ MUST
-    headers: {
-      ...options.headers,
-    },
-  });
+  const { headers, ...restOptions } = options;
 
-  // 🔁 Refresh ONLY on 401
-  if (response.status === 401 && endpoint !== "/auth/refresh-token") {
-    await fetch(`${BACKEND_API_URL}/auth/refresh-token`, {
-      method: "POST",
-      credentials: "include",
-    });
+  const accessToken = await getCookie("accessToken");
 
-    // retry original request
-    return fetch(`${BACKEND_API_URL}${endpoint}`, {
-      ...options,
-      credentials: "include",
-      headers: {
-        ...options.headers,
-      },
-    });
+  //to stop recursion loop
+  if (endpoint !== "/auth/refresh-token") {
+    await getNewAccessToken();
   }
+
+  const response = await fetch(`${BACKEND_API_URL}${endpoint}`, {
+    headers: {
+      Cookie: accessToken ? `accessToken=${accessToken}` : "",
+      ...headers,
+      // ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}),
+      // ...(accessToken ? { "Authorization": accessToken } : {}),
+    },
+    ...restOptions,
+  });
 
   return response;
 };
 
 export const serverFetch = {
-  get: (endpoint: string, options: RequestInit = {}) =>
+  get: async (endpoint: string, options: RequestInit = {}): Promise<Response> =>
     serverFetchHelper(endpoint, { ...options, method: "GET" }),
 
-  post: (endpoint: string, options: RequestInit = {}) =>
+  post: async (
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<Response> =>
     serverFetchHelper(endpoint, { ...options, method: "POST" }),
 
-  put: (endpoint: string, options: RequestInit = {}) =>
+  put: async (endpoint: string, options: RequestInit = {}): Promise<Response> =>
     serverFetchHelper(endpoint, { ...options, method: "PUT" }),
 
-  patch: (endpoint: string, options: RequestInit = {}) =>
+  patch: async (
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<Response> =>
     serverFetchHelper(endpoint, { ...options, method: "PATCH" }),
 
-  delete: (endpoint: string, options: RequestInit = {}) =>
+  delete: async (
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<Response> =>
     serverFetchHelper(endpoint, { ...options, method: "DELETE" }),
 };
 
-// export const dynamic = "force-dynamic";
-
-// import { getNewAccessToken } from "@/services/auth/auth.service";
-// import { getCookie } from "@/services/auth/tokenHandlers";
-
-// const BACKEND_API_URL =
-//   process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5000/api/v1";
-
-// // /auth/login
-// const serverFetchHelper = async (
-//   endpoint: string,
-//   options: RequestInit
-// ): Promise<Response> => {
-//   const { headers, ...restOptions } = options;
-
-//   const accessToken = await getCookie("accessToken");
-
-//   //to stop recursion loop
-//   if (endpoint !== "/auth/refresh-token") {
-//     await getNewAccessToken();
-//   }
-
-//   const response = await fetch(`${BACKEND_API_URL}${endpoint}`, {
-//     headers: {
-//       Cookie: accessToken ? `accessToken=${accessToken}` : "",
-//       ...headers,
-//       // ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}),
-//       // ...(accessToken ? { "Authorization": accessToken } : {}),
-//     },
-//     ...restOptions,
-//   });
-
-//   return response;
-// };
-
-// export const serverFetch = {
-//   get: async (endpoint: string, options: RequestInit = {}): Promise<Response> =>
-//     serverFetchHelper(endpoint, { ...options, method: "GET" }),
-
-//   post: async (
-//     endpoint: string,
-//     options: RequestInit = {}
-//   ): Promise<Response> =>
-//     serverFetchHelper(endpoint, { ...options, method: "POST" }),
-
-//   put: async (endpoint: string, options: RequestInit = {}): Promise<Response> =>
-//     serverFetchHelper(endpoint, { ...options, method: "PUT" }),
-
-//   patch: async (
-//     endpoint: string,
-//     options: RequestInit = {}
-//   ): Promise<Response> =>
-//     serverFetchHelper(endpoint, { ...options, method: "PATCH" }),
-
-//   delete: async (
-//     endpoint: string,
-//     options: RequestInit = {}
-//   ): Promise<Response> =>
-//     serverFetchHelper(endpoint, { ...options, method: "DELETE" }),
-// };
-
-// /**
-//  *
-//  * serverFetch.get("/auth/me")
-//  * serverFetch.post("/auth/login", { body: JSON.stringify({}) })
-//  */
+/**
+ *
+ * serverFetch.get("/auth/me")
+ * serverFetch.post("/auth/login", { body: JSON.stringify({}) })
+ */
