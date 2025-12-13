@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-export const dynamic = "force-dynamic";
-
 import { serverFetch } from "@/lib/server-fetch";
 
 /**
